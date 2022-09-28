@@ -3,19 +3,14 @@ import json
 class Toyota:
     file = 'cars.json'
 
-    def __init__(self, name, engine, color):
+    def __init__(self, name, engine, color, gear):
         self.name = name
         self.engine = engine
         self.color = color
-
-    # def change_color(self, new_color):
-    #     self.color = new_color
+        self.gear = gear
 
     def drive(self):
         print(self.name + ' driving ')
-
-    def shift_gear(self):
-        print(self.name + ' shift gear ')
 
     @classmethod
     def get_data(cls):
@@ -29,7 +24,7 @@ class Toyota:
     def get_all_cars(cls):
         data = cls.get_data()
         for car in data:
-            print(str(car['id']) + ") Our " + car['name'] + " has " + car['engine'] + " motor and " + car['color'] + " color.")
+            print(str(car['id']) + ") Our " + car['name'] + " has " + car['engine'] + " motor " + car['color'] + " color and has " + car['gear'] + " gears")
 
     @classmethod
     def get_by_id(cls, id):
@@ -37,7 +32,7 @@ class Toyota:
         count = 0
         for car in data:
             if id == car['id']:
-                print("Your car is " + car['name'] + ", she has " + car['engine'] + " motor and " + car['color'] + " color")
+                print("Your car is " + car['name'] + ", she has " + car['engine'] + " motor " + car['color'] + " color and has " + car['gear'] + " gears")
                 break
             count += 1
             if count == len(data):
@@ -64,10 +59,35 @@ class Toyota:
             count += 1
             if count == len(data):
                 print('Sorry, but not found car with this number!')
+    @classmethod
+    def shift_gear(cls, id):
+        data = cls.get_data()
+        count = 0
+        for car in data:
+            if id == car['id']:
+                gear = 0
+                while gear == 0 or gear > int(car['gear']):
+                    gear = int(input('Choose gear to drive: '))
+                    if gear > int(car['gear']):
+                        print('Your car do not has ' + str(gear) + ' gears')
+                    elif gear == 0:
+                        print('Sorry, but you got nowhere')
+                print('Okey, you start drive...')
+                while 0 < gear and gear <= int(car['gear']):
+                    print('You enter ' + str(gear) + ' gear and go...')
+                    gear = int(input('What next gear do you want: '))
+                if gear == 0:
+                    print('You stopped')
+                else:
+                    print('Your car is crashed! Sory.')
+                break
+            count += 1
+            if count == len(data):
+                print('Sorry, but not found car with this number!')
 
     def save(self):
         data = self.get_data()
-        new_car = {'name': self.name, 'engine': self.engine, 'color': self.color}
+        new_car = {'name': self.name, 'engine': self.engine, 'color': self.color, 'gear': self.gear}
         if len(data) == 0:
             new_car['id'] = 1
         else:
